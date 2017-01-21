@@ -1,0 +1,554 @@
+
+<!-- saved from url=(0059)http://oak.cs.ucla.edu/classes/cs143/project/project1B.html -->
+<html xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<!--<base href="http://oak.cs.ucla.edu/classes/cs143/project/">--><base href=".">
+<title>CS 143 Project 1 Part B</title>
+  <style type="text/css">
+    .code {
+        background-color:#eeeeee;
+        border: solid 1px #000000;
+        font-family:"Courier New", Courier, mono;
+        font-size: .8em;
+        margin: 5px;
+        padding: 5px;
+    }
+  </style>
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body bgcolor="#FFFFFF" link="blue" vlink="purple" lang="EN-US">
+<h1 align="center" style="text-align:center">Project 1 Part B</h1>
+<p align="center" style="text-align:center"><strong>Due Wednesday, 10/19/2016 by 11:00pm</strong></p>
+
+<h3>Change history</h3>
+
+<!--
+<b>04/12 6:20PM:</b> Fixed the incorrect statement on the default MySQL storage engine. MyISAM is the default storage engine, not InnoDB. Added explicit single-file requirement for query.php.<br/>
+<b>04/12 7:20PM:</b> Added the explicit requirement on double quote removal during load.<br />
+<strong>04/14 11:50AM:</strong> Fixed the data encoding to UTF-8 for characters that were not showing up correctly.
+
+
+You will need to download the updated data and rerun your load scripts.<br />
+<strong>04/14 3:05PM: </strong>Fixed the encoding (again!).  Once again, please re-download the data file if you have done so since this morning.<br />
+<strong>04/25 10:09AM: </strong>The description has been reorganized, so that the database integrity part appears at the end.<br/>
+-->
+
+<p>
+</p><h3>Overview</h3>
+
+	<p>In this part of the project you will primarily learn how to use <a href="http://dev.mysql.com/doc/refman/5.0/en/mysql.html">MySQL</a> and how to access it from the Apache server. You will create a few tables to contain information about movies and actors, load them with (real) data we are providing, and run a few queries to get familiar with MySQL. 
+You will also have to create a php page that allows users to query your MySQL database using HTML forms.
+Finally, you will also need to identify a few constraints that the tables should satisfy and enforce them for the tables. </p>
+
+<h3>Learn MySQL Command-Line Interface</h3>
+<p>Start with reading our <a href="http://oak.cs.ucla.edu/classes/cs143/project/mysql/intro.html">Introduction to MySQL</a>. Try the examples in the document, and experiment with the help command
+to get farmiliar with the MySQL command-line interface.</p>
+
+
+<p></p><h3>Description of Our Dataset and Table Schema</h3>
+<p>The dataset needed for Project 1 is located in the <tt>~/data/</tt> directory of the virtual machine. (The data files can also be obtained by downloading <a href="http://oak.cs.ucla.edu/classes/cs143/project/data/data.zip">data.zip</a> and unzipping it to the directory with the <tt>wget</tt> and <tt>unzip</tt> commands.) Browse the data files with <code>more [filename]</code> to see how fields are enclosed and delimited, how NULL values are represented, and so on. (In case you are concerned about the encoding of our dataset, you may assume the files are encoded in UTF-8, even if some characters do not show correctly.  Also make sure to use the default encoding, UTF-8, for all character fields in your tables.)</p>
+<p>Here is
+	a brief description of the tables that you will have to create for this project and the data files that contain the tuples for the tables. </p>
+<p><b><u>The Movie table</u></b>:
+		This table describes information regarding movies in the database. It specifies an
+		identification number unique to each movie, the title of the movie, the year
+		the movie was released, the MPAA rating given to the movie, and the production
+		company that produced the movie. The schema of the Movie table is given as
+	follows: </p>
+	
+	<code>Movie(id, title, year, rating, company)</code><p>
+
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">id</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Movie ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">title</div></td>
+			<td><div align="center">VARCHAR(100)</div></td>
+			<td><div align="center">Movie title</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">year</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Release year</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">rating</div></td>
+			<td><div align="center">VARCHAR(10)</div></td>
+			<td><div align="center">MPAA rating</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">company</div></td>
+			<td><div align="center">VARCHAR(50)</div></td>
+			<td><div align="center">Production company</div></td>
+		</tr>
+	</tbody></table>
+	
+	<p>The load file for the table is movie.del in the zip file. </p>
+	<p><b><u>The Actor table</u></b>:
+		This table describes information regarding actors and actresses of movies. It specifies
+		an identification number unique to all people (which is shared between actors
+		and directors), the last name of the person, the first name of the person, the
+		sex of the person, the date of birth of the person, and the date of death of
+		the person if applicable. The schema of the Actor table is given as follow:</p>
+	<code>Actor(id, last, first, sex, dob, dod)</code><p>
+	</p><table width="279" border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">id</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Actor ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">last</div></td>
+			<td><div align="center">VARCHAR(20)</div></td>
+			<td><div align="center">Last name</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">first</div></td>
+			<td><div align="center">VARCHAR(20)</div></td>
+			<td><div align="center">First name</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">sex</div></td>
+			<td><div align="center">VARCHAR(6)</div></td>
+			<td><div align="center">Sex of the actor</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">dob</div></td>
+			<td><div align="center">DATE</div></td>
+			<td><div align="center">Date of birth</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">dod</div></td>
+			<td><div align="center">DATE</div></td>
+			<td><div align="center">Date of death</div></td>
+		</tr>
+	</tbody></table>
+<p>There are three load files for the table: actor1.del, actor2.del, and actor3.del.  You will have to load each file only once to the table.</p>
+	<p><b><u>The Director table</u></b>:
+		It describes information regarding directors of movies. It specifies an
+		identification number of the director, the last name of the director, the
+		first name of the director, the date of birth of the director, and the date
+		of death to the director if applicable. The schema of the Director table is
+		given as follow:</p>
+	<code>Director(id, last, first, dob, dod)</code>
+	<p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">id</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Director ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">last</div></td>
+			<td><div align="center">VARCHAR(20)</div></td>
+			<td><div align="center">Last name</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">first</div></td>
+			<td><div align="center">VARCHAR(20)</div></td>
+			<td><div align="center">First name</div></td>
+		</tr>
+
+		<tr>
+			<td><div align="center">dob</div></td>
+			<td><div align="center">DATE</div></td>
+			<td><div align="center">Date of birth</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">dod</div></td>
+			<td><div align="center">DATE</div></td>
+			<td><div align="center">Date of death</div></td>
+		</tr>
+	</tbody></table>
+	<p>Note that the ID is unique to all people (which is shared between actors and directors). That is, if a
+		person is both an actor and a director, the person will have the same ID both
+		in the Actor and the Director table.</p>
+	<p>The load file for the table is director.del. </p>
+	<p><b><u>The MovieGenre table</u></b>: It describes information
+		regarding the genre of movies. It specifies the identification number of a
+		movie, and the genre of that movie. The schema of the MovieGenre table is given as follow:</p>
+	<code>MovieGenre(mid, genre)</code><p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">mid</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Movie ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">genre</div></td>
+			<td><div align="center">VARCHAR(20)</div></td>
+			<td><div align="center">Movie genre</div></td>
+		</tr>
+	</tbody></table>
+	<p>The load file for the table is moviegenre.del. </p>
+	<p><b><u>The MovieDirector table</u></b>: It describes the information
+		regarding the movie and the director of that movie. It specifies the
+		identification number of a movie, and the identification number of the director
+		of that movie. The schema of the MovieDirector table
+		is given as follow:</p>
+	<code>MovieDirector(mid, did)</code><p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">mid</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Movie ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">did</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Director ID</div></td>
+		</tr>
+	</tbody></table>
+	<p>The load file for the table is moviedirector.del.</p>
+	<p><b><u>The MovieActor table</u></b>: It describes information
+		regarding the movie and the actor/actress of that movie. It specifies the
+		identification number of a movie, and the identification number of the
+		actor/actress of that movie. The schema of the MovieActor table is given as follow:</p>
+	<code>MovieActor(mid, aid, role)</code><p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">mid</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Movie ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">aid</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Actor ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">role</div></td>
+			<td><div align="center">VARCHAR(50)</div></td>
+			<td><div align="center">Actor role in movie</div></td>
+		</tr>
+	</tbody></table>
+	<p>The load files for the table are movieactor1.del and movieactor2.del.
+		You will have to load each file only once.</p>
+	<p><b><u>The Review table</u></b>:
+		Later in Project 1C, you will create a Web interface where the users of your
+		system can add “reviews&nbsp;&nbsp;on a movie (similarly to Amazon product reviews). The
+		Review table stores the reviews added in by the users in the following schema:</p>
+	<code>Review(name, time, mid, rating, comment)</code><p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">name</div></td>
+			<td><div align="center">VARCHAR(20)</div></td>
+			<td><div align="center">Reviewer name</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">time</div></td>
+			<td><div align="center">TIMESTAMP</div></td>
+			<td><div align="center">Review time</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">mid</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Movie ID</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">rating</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Review rating</div></td>
+		</tr>
+		<tr>
+			<td><div align="center">comment</div></td>
+			<td><div align="center">VARCHAR(500)</div></td>
+			<td><div align="center">Reviewer comment</div></td>
+		</tr>
+	</tbody></table>
+	<p>Each tuple specifies the name of
+		the reviewer, the timestamp of the review, the movie id, the rating that the reviewer
+		gave the movie (i.e., x out of 5), and additional comments the reviewer gave
+		about the movie. </p>
+	<p>Since this data will be added by your users, there is no
+		load file.</p>
+	<p><b><u>The MaxPersonID and MaxMovieID Tables</u></b>:
+		Later in Project 1C, you will also construct a Web interface where users
+		can add new actor, director or movie information to the database. Once a user
+		adds a new actor/director, your system should assign a new ID to the
+		actor/director and insert a tuple to the
+		Actor/Director table. Similarly, your system should assign a new ID to a new
+		movie.</p>
+	<p>In order to assign a new ID to, say, an actor/director, your
+		system has to remember what was the largest ID that it
+		assigned to a person in the last insertion. The MaxPersonID table is used for this purpose, which has the following schema:</p>
+	<code>MaxPersonID(id)</code><p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">id</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Max ID assigned to all persons</div></td>
+		</tr>
+	</tbody></table>
+	<p>MaxPersonID is a one-tuple, one-attribute
+		table which maintains the largest ID number that the system has assigned to a
+		person so far. Whenever a new actor/director is inserted, the system looks up
+		this table, increases the ID value of the tuple by
+		one, and assigns the increased ID value to the new actor/director. You may
+		consider this MaxPersonID table as a “persistent
+	variable"&nbsp;that remembers its value even after your program stops.</p>
+	<p>The MaxMovieID is used similarly
+		to assign a new ID to a new movie inserted by the user. As a new movie is added
+		to the database, the entry in this table is incremented and assigned to the new
+		movie. The schema of the MaxMovieID table is given as
+		follow:</p>
+	<code>MaxMovieID(id)</code><p>
+	</p><table border="1" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+			<th width="22%" scope="col"><div align="center">Name</div></th>
+			<th width="31%" scope="col"><div align="center">Type</div></th>
+			<th width="47%" scope="col"><div align="center">Description</div></th>
+		</tr>
+		<tr>
+			<td><div align="center">id</div></td>
+			<td><div align="center">INT</div></td>
+			<td><div align="center">Max ID assigned to all movies</div></td>
+		</tr>
+	</tbody></table>
+	<p>You will have to create these two tables, and insert the tuple (69000) to MaxPersonID table and the tuple (4750) into the MaxMovieID table.</p>
+
+<p></p><h2>Loading and Querying the Dataset</h2>
+
+Now that you understand our provided dataset, it is time to create
+the tables in MySQL. Write a SQL script named <code>create.sql</code>
+that creates all tables above. If you are not sure
+how to create a table in MySQL or how to write and run a SQL script, please
+read our <a href="http://oak.cs.ucla.edu/classes/cs143/project/mysql/intro.html">Introduction to MySQL</a> again.
+In creating the tables, please make sure that their schemas 
+are <em><b>exactly as we specified above including their cases</b></em>,
+because having the same schema among all students is essential for
+the correct functioning of Part C of this project. 
+
+<p>Note that in the VMware image, we have created two databases in MySQL: <code>TEST</code> and <code>CS143</code> (note these database names are case sensitive). The <code>CS143</code> database is your "production" database, meant for use in the final versions of your code. The <code>TEST</code> database is for any experimentation and for use during development and debugging. We have  created two MySQL users for the database. 
+For your project work, use the MySQL user <code>cs143</code> (no password), which has full access to the <code>CS143</code> and <code>TEST</code> databases.
+The user <code>root</code> with password <code>password</code> has full unrestricted access to everything and should be used only for special adminstrative operations, like creating new users and databases, etc.
+
+</p><p>Once you the finish writing <tt>create.sql</tt>, create the tables in
+the <tt>CS143</tt> database, using a command like
+
+</p><pre class="code">% mysql CS143 &lt; create.sql</pre>
+
+in Ubuntu shell (or using <tt>SOURCE</tt> command in <tt>mysql</tt>).
+
+	<p><strong>Notes on CR/LF issue:</strong> If your host OS is Windows, you need to pay special attention to how each line of a text file ends. By convention, Windows uses a pair of CR (carriage return) and LF (line feed) characters to terminate lines. On the other hand, Unix (including Linux and Mac OS X) uses only a LF character. Therefore, problems arise when you are feeding a text file generated from a Windows program to a program running in our guest OS (such as <tt>mysql</tt>). Since the end of the line of the input file is different from what the tools expect, you may encounter unexpected behavior from these tools. If you encounter this problem, you may want to run the <tt>dos2unix</tt> command from the guest OS on your Windows-generated text file. This command converts CR and LF at the end of each line in the input file to just LF. Type <tt>dos2unix --help</tt> to learn how to use this command.
+
+	</p><p>Now that you have created tables, it is time to load data.
+Create a MySQL script, named <code>load.sql</code>, that loads all our
+provided data into the created tables. Again, if you are not sure how
+to load data into tables, read
+our <a href="http://oak.cs.ucla.edu/classes/cs143/project/mysql/intro.html">Introduction to MySQL</a>.
+Read <a href="http://dev.mysql.com/doc/refman/5.0/en/load-data.html">MySQL
+Reference on LOAD DATA</a> as well to learn more detailed options
+available for MySQL LOAD command.  Assume that all data files are
+available at <code>~/data/</code> directory,
+like <code>~/data/director.del</code> and write your script
+accordingly. Make sure that the double quotes enclosing string fields
+in the load files are removed when inserted into a table. Finally,
+make sure your script inserts the needed tuples for MaxPersonID and
+MaxMovieID tables as well. Load all your data into the tables by running
+the command
+</p><pre class="code">% mysql CS143 &lt; load.sql</pre>
+in your Ubuntu shell.<p></p>
+
+	<p>Now explore the dataset by running the SELECT statements that answer the following questions from your database:
+	</p><ul>
+	<li> Give me the names of all the actors in the movie 'Die Another Day'. Please also make sure actor names are in this format: &nbsp;<strong>&lt;firstname&gt; &lt;lastname&gt;</strong> &nbsp; <strong>(seperated by single space, **very important**)</strong>.
+	</li><li> Give me the count of all the actors who acted in multiple movies. 
+	</li></ul>
+	Feel free to run other interesting queries and learn about the data. Create a MySQL script named <code>queries.sql</code> that contains: <ul>
+    <li>the two SELECT statements above (as the first two queries)</li>
+    <li>another query that you came up with</li></ul>
+    Add an English description of each query as a comment to the script. You can use the <code>--</code> tag to make comments within your script. 
+<p></p>
+
+	<p>Remeber to use the <code>CS143</code> database when you load the data and run queries. Otherwise, you will get error messages. Pay attention to CR/LF issue and run <tt>dos2unix</tt> command on your script files if necessary.</p>
+
+	<h2>Building a Web Query Interface</h2>
+	<p>Now that all your data has been loaded, you have to create a php page
+that allows users to type in a SQL SELECT statement in a text input box and submit the query through a Web browser. 
+Given a user query, your php code needs to execute the query on MySQL, return the results as the results page in an HTML table. The query result should be presented in a legible form. The input box and the submit button should be preserved in the result page to allow for additional querying. To give you a more concrete idea on what is expected for this part of the project, we made a demo site available at  <a href="http://oak.cs.ucla.edu/classes/cs143/project/demo/p1b/" target="_BLANK">HERE</a>.  Visit the site, type in an SQL query, like "SELECT * FROM Actor WHERE id &lt; 20", and see what result you get. Of course, your implementation does not have to be identical to the demo site. It is only to give you a general idea on what is expected from this part. To make this part of project manageable, for this part (and this part only) you may assume that users will always issue correct SELECT queries and all user inputs can be trusted.</p>
+
+<p>You have to use a TEXTAREA input box (with the name "query") as the mean of input from your user.
+The input box should be large enough to allow for a decent size query by
+the user. (Different types of HTML input boxes were explained
+in <a href="http://oak.cs.ucla.edu/classes/cs143/project/php/php_input.html">PHP input handling tutorial</a> linked in
+Project 1A.) Once the user submits her query in the box, it should be sent back to your php page, which displays the result of the query. For information on how you can interact with MySQL from PHP (e.g., issuing a query to MySQL and retrieving results), see our brief tutorial
+on <a href="http://oak.cs.ucla.edu/classes/cs143/project/php/php_db.html">MySQL and PHP</a>. 
+<a href="http://us2.php.net/mysql">MySQL functions in PHP</a>
+page has the full list of MySQL functions available in PHP. In particular,
+there exist PHP functions to obtain the number of columns in the results
+from MySQL and the names of those columns. </p>
+
+	<p>Please make sure that all URLs in your php page is <em><b>relative</b></em>, so that your code does not break when we grade them. Make sure that you connect to the database with the <b>username "cs143" and empty password and use the database <code>CS143</code></b>. Finally, name your php file as <code>query.php</code>.</p>
+
+	<h2>Enforcing Data Integrity</h2>
+	<p>If the data in your MovieDatabase system at a given point in time represents a correct state of the real world, a number of constraints are expected to hold. Now it is time to identify the constraints that you believe should hold in a correct MovieDatabase (i.e., in a database that represents a viable state of the real world).  To get you started, here are a few possible examples, some of which depend on a particular schema: </p>
+	<ul type="disc">
+		<li>Every movie has a
+			unique identification number.</li>
+		<li>Every movie must have
+			a title.</li>
+		<li>Every actor must have
+			a date of birth.</li>
+	</ul>
+	<p>Write down in English a list of constraints that you can think of that your database should satisfy.  Consider only constraints that go beyond what is already enforced in the schema (e.g., you do not need to specify that ratings are integers).  
+
+</p><p>Of course, not every real-world constraint can be expressed in SQL. 
+To learn about constraint support in MySQL, read our short tutorial on <a href="http://oak.cs.ucla.edu/classes/cs143/project/mysql/constraints.html">Constraints in MySQL</a>.
+
+</p><p>Now From the constraints that you listed before, identify the ones that can be enforced using either primary key constraints, referential integrity (foreign key) constraints, or CHECK constraints and specify them in SQL. In order to get the full credit, you should specify at least 
+</p><ul type="disc">
+		<li>Three primary key
+			constraints</li>
+		<li>Six referential
+			integrity constraints, and </li>
+		<li>Three CHECK constraints</li>
+	</ul>
+and express them in SQL.  
+
+
+
+<p>As we explained in the tutorial, note that MySQL supports several "storage engines" for storing tables into the disk. The default MyISAM engine, unfortunately, does not support referential integrity constraints. For this project you will have to use the InnoDB storage engine, which is the only one to support foreign keys. You can make a table to use the InnoDB storage engine by adding the clause "<tt>ENGINE = INNODB</tt>" at the end of the <tt>CREATE TABLE</tt> statement. Also note that MySQL does not support CHECK constraints, so even if you add CHECK constraints to tables, MySQL simply ignores them. Therefore, for the three CHECK constraints, just write the constraints pretending that MySQL supports them.  </p>
+
+<p>Modify your <code>create.sql</code> script, so that all tables use
+the InnoDB storage engine and the 12 constraints that you
+identified above are added to the database. The simplest way to achieve
+this is to change your <tt>CREATE TABLE</tt> statements in the script to include
+the constraint definitions and <tt>ENGINE = INNODB</tt>. Once you modify your script, you can simply drop all existing tables (using <tt>DROP TABLE</tt> command) and run the <tt>create.sql</tt> and <tt>load.sql</tt> scripts again to recreate and load the tables and add the constraints.  For each constraint that you have added to <tt>create.sql</tt>, write down its English description as a comment. 
+
+<!--
+</p><p>In case you do not want to drop and recreate tables, you can change the stroage engine of an existing table by a command like:
+</p><pre class="code">ALTER TABLE Movie ENGINE = INNODB</pre>
+You can also add a constraint to an existing table by a command like
+<pre class="code">ALTER TABLE Movie ADD CONSTRAINT PRIMARY KEY (id)</pre>
+This method, however, is not recommended for this part of the project because it adds unnecessary complexity.
+-->
+
+</p><p>Once all constraints are added to your database, for each constraint, demonstrate at least one database modification that violates it, and explain why the operation violates the constraint. Create another MySQL script named <code>violate.sql</code> that contains all such modification statements. For each statement, explain what constraint it violates in detail as a comment in the script. Again, for the three CHECK constraints, pretend that MySQL supports them and write the modification statements that will violate them if MySQL supports them.</p>
+
+<h2>Submission Instruction</h2>
+	<h3>Preparing Your Submission</h3>
+<p>
+Please create <b>a folder named with your UID</b>, put all your files into the folder, then compress this folder into a single zip file called "P1B.zip". That is, the zip file should have the following structure.
+</p>
+<pre class="code">P1B.zip
+ |
+ +- Folder named with Your UID, like "904200000" (without quotes)
+     |
+     +- readme.txt
+     |
+     +- team.txt
+     |
+     +- create.sql
+     |
+     +- load.sql
+     |
+     +- queries.sql
+     |
+     +- query.php
+     |
+     +- violate.sql
+</pre>
+<p>
+Please note that the <b>file names are case sensitive</b>, so you should use the exact same cases for the file names. 
+(For team work, only the submitter's UID is needed to name the folder.) Here is more detailed description of each file to be included in the zip file:
+</p>
+	<ul type="disc">
+		<li><code>readme.txt</code>: Readme File</li>
+		<li><code><b>team.txt</b></code>: A plain-text file (no word or PDF, please) that contains the UID(s) of every member of your team. If you work alone, just write your UID (e.g. 904200000). <br> If you work with a partner, write both UIDs separated by a comma (e.g. 904200000, 904200001). <b>Do not include any other content in this file!</b></li>
+		<li><code>create.sql</code>: The MySQL script that you used to generate the tables with the appropriate constraints. Please make sure <b>the created tables follow the schema exactly as we specified</b>. Be extra careful with case sensitivity. For each constraint, write an English description of the constraint that you are enforcing as comments in the script. Make sure your script runs without any error when you execute the command <tt>mysql CS143 &lt; create.sql</tt>. </li>
+		<li><code>load.sql</code>: The MySQL script that loads all tuples into the tables. Please make sure that <b>the data files are loaded from <code>~/data/</code> directory</b>, so that your script is able to access the files during our grading. Otherwise, your script is likely to generate error and you may get as low as zero point for this part. Also make sure that the script inserts appropriate tuples to MaxPersonID and MaxMovieID tables.
+		</li><li><code>queries.sql</code>: The MySQL script that contains <b>three</b> SELECT statements to issue queires to the dataset together with their English description as comments. Each SELECT statement should end with a semicolon(;).
+		</li><li><code>query.php</code>: Your PHP code that allows users to issue a SELECT statement to the MySQL database. Please make sure the <b>all URLs in your file are relative</b>. Make sure that you connect to MySQL with the <b>username "cs143" and empty password and use the database <code>CS143</code></b>.  Make sure your PHP code does <b>not depend on any other files</b> (e.g., images, css file, other html files, etc). Otherwise, you may get as low as zero point due to errors during grading. Furthermore, the query.php is more like a question-answering interface, and therefore you should use <strong>HTTP GET</strong> protocol to process the user input as <a href="http://www.w3.org/2001/tag/doc/whenToUseGet.html#checklist">suggested by W3C</a>.
+		</li><li><code>violate.sql</code>: The list of SQL modification statements (INSERT/DELETE/UPDATE) that violate each constraint. For each statement, write a short explanation on which constraint it violates and why. Also, after each explanation of the 9 primary and foreign key constraints, "cut-and-paste" the output that you get from MySQL when the statement is executed.</li>
+		</ul>
+	
+<h3>Testing of Your Submission</h3>
+Grading is a difficult and time-consuming process,
+and file naming and packaging convention is very important to test your submission without any error.
+In order to help you ensure the correct packaging of your submission, you can test your packaging by downloading this <a href="http://oak.cs.ucla.edu/classes/cs143/project/p1b_test">test script</a>.
+In essence, this script unzips your submission to a temporary directory and tests whether or not you have included all your submission files.
+Once you download the test script, it can be executed like:
+<pre class="code">cs143@cs143:~$ ./p1b_test &lt;Your UID&gt;
+</pre>
+(Put your P1B.zip file in the same directory with this test script, you may need to use "chmod +x p1b_test" if there is a permission error).
+
+<p>You <b>MUST</b> test your submission using the script before your final submission to minimize the chance of an unexpected error during grading.
+Significant points may be deducted if the grader encounters an error
+during grading.
+When evertything runs properly, you will see an output similar to the following from this script:
+</p><pre class="code">Check File Successfully. Please upload your P1B.zip file to CCLE.
+</pre>
+
+<h3>Submitting Your Zip File</h3>
+        <p>Visit the Project 1B submission page on CCLE to submit your zip file electronically by the deadline. <strong>Submit only the "P1B.zip" file!</strong> In order to accomodate the last minite snafu during submission, you will have 30-minute window after the deadline to finish your submission process. That is, as long as you start your submission before the deadline and complete within 30 minutes after the deadline, we won't deduct your grade period without any penalty.</p>
+
+        <h3>Late Submission Policy</h3>
+                <p>To accommodate the emergencies that
+                students may encounter, each team has 4-day grace period for late submission.
+                The grace period can be used for any part of the project in the unit of one
+                day. For example, a student may use 1-day grace period for Project 1A and 2-day      
+                grace period for Project 2B. Any single project part may not be more than 2 days late. Note that even if a team submits a project 12 hours
+                late, they would need to use a full day grace period to avoid late penalty.
+                If your project is submitted late, we will automatically use the available
+                days in your grace period unless you specifically mention otherwise in the
+                README file.</p>
+
+
+
+</body></html>

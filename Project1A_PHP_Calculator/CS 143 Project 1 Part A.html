@@ -1,0 +1,211 @@
+
+<!-- saved from url=(0059)http://oak.cs.ucla.edu/classes/cs143/project/project1A.html -->
+<html xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<!--<base href="http://oak.cs.ucla.edu/classes/cs143/project/">--><base href=".">
+<title>CS 143 Project 1 Part A</title>
+  <style type="text/css">
+    .code {
+        background-color:#eeeeee;
+        border: solid 1px #000000;
+        font-family:"Courier New", Courier, mono;
+        font-size: .8em;
+        margin: 5px;
+        padding: 5px;
+    }
+  </style>
+
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body lang="EN-US" link="blue" vlink="purple" bgcolor="#FFFFFF">
+	<h1 align="center"><b>Project 1 Part A</b></h1>
+	<p align="center" style="text-align:center"><strong>Due Wednesday, 10/05/2016 by 11:00pm</strong></p>
+
+<h3>Change history</h3>
+<h3>Partners</h3>
+<p>The CS143 project may be completed in teams of one or two sutdents. The choice is up to each student. Partnership rules consist of the following: </p>
+<ul type="disc">
+	<li>An identical amount of work is expected and the same grading scale is used regardless of the size of your team. </li>
+	<li>If you work in a team of two, <b>choose your partner carefully</b>. Partners are permitted to "divorce" at any time during the course, and "single" student may choose to find a partner as the project progresses. However students from divorced teams may not form new teams or join other teams. </li>
+	<li>Partners in a team will receive exactly the same grade for each project part submitted jointly. </li>
+</ul>
+<p>If you have two students in your team, please make sure to submit your work jointly - do <em>not</em> turn your project in twice, once for each partner. </p>
+
+<h3>Scope</h3>
+	<p> The primary purpose of this first "PHP warm-up" part is
+		for us to provide you with a whole bunch of basic information, and to get
+		everyone up-to-speed on our computing systems and the languages and tools we
+		will be using. Those of you who have done some Web
+		programming before, especially in PHP,
+		may find this project part nearly trivial. Those of you who haven't will find
+		it merely straightforward. With all that said, <i>please don't start at the
+		last minute</i> -- as with all programming and systems work, everything takes a
+	bit of time, and unforeseen snafus do crop up. </p>
+
+<h3>System Setup</h3>
+	<p>We will be using VirtualBox to run the Linux operating system in a virtual machine. VirtualBox allows a single machine to share resources and run multiple operating systems simultaneously. 
+Read our <a href="http://oak.cs.ucla.edu/classes/cs143/project/virtualbox/index.html">VirtualBox setup instruction</a> and follow the instructions to install VirtualBox and our virtual-machine image on your own machine. In particular, please ensure that <b><a href="http://oak.cs.ucla.edu/classes/cs143/project/virtualbox/index.html#shared-folder">a shared folder is set up</a> correctly as <code>vm-shared</code></b>. Otherwise, the Apache server in your virtual machine may not function properly.
+<!--
+<strong>(Particularly, if you are a mac user and see an "vboxnet0" error, please make sure you follow our mac instruction above step by step.)</strong>
+-->
+</p>
+
+<p>The provided virtual machine image is based on Ubuntu 14.04, MySQL 5.5.44, Apache 2.4.7, and PHP 5.5.9.  You will need to use the provided VirtualBox guest OS to develop and test all projects for this class.  Your VirtualBox guest is essentially a Linux machine, which is a variant of Unix. Your guest is accessible from your host through secure shell (ssh) at 'localhost' port 1432 with username 'cs143' and password 'password'. Its Apache server is accessible from host at 'localhost' port 1438. If you are not familiar with Unix, now is the time to read the <a href="http://oak.cs.ucla.edu/classes/cs143/project/unix/index.html">Unix Tutorial for Beginners</a> to learn the basic Unix commands.</p>
+
+<h3>PHP Web Calculator</h3>
+<p>In this part of the project you will familiarize yourself with Apache2/PHP 
+by building a small Web calculator application in PHP. 
+
+</p><ul>
+<li><b>Step 1:</b> Review the <a href="http://www.w3schools.com/php/php_intro.asp">W3CSchools PHP tutorial</a> to learn basic PHP. Please read at least up to "PHP $_POST" page of the tutorial. You can test the examples in the tutorial by creating a php page in the <code>${HOME}/www/</code> directory in the guest OS, which is aliased (or symbolic linked) to the VirtualBox shared directory. All files in <code>${HOME}/www/</code> are served by the guest Apache server and are accessible at 
+<a href="http://localhost:1438/~cs143/">http://localhost:1438/~cs143/</a>
+from your host browser. Note that <code>${HOME}</code> is common Unix notation to refer to your home directory, which is <code>/home/cs143/</code> in our setup.
+
+<p></p></li><li><b>Step 2:</b> Play with our demo calculator <a href="http://oak.cs.ucla.edu/classes/cs143/project/demo/calc/">here</a> (access restricted to username 'project' and password 'demo')
+to understand what it does. <p>
+
+</p></li><li><b>Step 3:</b> Implement your own calculator and make it available at
+<a href="http://localhost:1438/~cs143/calculator.php">http://localhost:1438/~cs143/calculator.php</a>.
+At the minimum, your calculator application should satisfy the following requirements.<p>
+
+  </p><ol>
+  <li>It should support +, -, * and / operators and the evaluation of the input should follow the standard operator precedence (i.e., the operators should be left-associative and / and * operators have precedence over + and -).
+  </li><li>It should take both interger (like 1234) and real (like 123.45) numbers.
+  </li><li>It <em>does not</em> need to support parentheses. (As a side note, in case you took the compiler class before, you may remember that the correct handling of nested-parentheses requires more expressive power than regular expression, like context-free grammar.)
+  </li><li>It should handle any errors gracefully. For example, even if the user input is invalid expression, the result page should not display raw PHP error message. 
+  </li><li>Your calculator should be implemented as a <em>single</em> .php page. Make sure that it does not include and/or read any other file (like CSS file, images or other HTML files).
+  </li><li>For all links in your calculator, including form actions, you should use <em><b>relative URLs</b></em> instead of absolute. The reason is simple: depending on where we run your Web calculator, the hostname and the path of your calculator may change. So if you use absolute URL, you calculator may <em>break</em> when we try to grade it and we may have to give zero point for your work!
+  </li>
+  <li>
+  The calculator.php is more like a question-answering interface, and therefore you should use <strong>HTTP GET</strong> protocol to process the user input as <a href="http://www.w3.org/2001/tag/doc/whenToUseGet.html#checklist">suggested by W3C</a>.
+  </li>
+  </ol><p>
+In implementing your calculator, you may find the PHP functions, <code><a href="http://us2.php.net/preg_match" target="_top">preg_match()</a></code> and <code><a href="http://us2.php.net/eval" target="_top">eval()</a></code> helpful. If you are not familiar with regular expression, read a tutorial on regular expression like <a href="http://www.ibm.com/developerworks/library/os-php-regex1/index.html" target="_top">Mastering regular expression in PHP</a>.  If you are not familiar with the HTML input forms, you may also find our <a href="http://oak.cs.ucla.edu/classes/cs143/project/php/php_input.html">tutorial on PHP input handling</a> helpful. </p><p>
+
+</p></li></ul>
+Throughly test your code and make sure that it meets the above minimum requirements and runs correctly on our virtual machine. Note that this part of the project will be graded based on the functionality not on the look or style. As long as you meet the minimum requirements, you will get full credit for this project.
+
+	<!--<h2>Part A</h2>
+	<p>In this portion of the project you will experiment with <a href="http://dev.mysql.com/doc/refman/5.0/en/mysql.html">MySQL’s command-line interface</a> and its bulk loader. You will create a database with two  tables to contain information about actors and actresses, load the table with a small amount of (real) data we are providing, and run a few commands to get familiar with MySQL. </p>
+	<ul type=disc>
+		<li><b>Step 0:</b> Begin by reading sections 3.1 through 3.5 of the <a href="http://dev.mysql.com/doc/refman/5.0/en/tutorial.html">MySQL Tutorial</a>. Try some of the examples in the document, and experiment with the help command. </li>
+		<li><b>Step 1:</b> Download the two comma separated value (.csv) files <code><a href="data/actors-short.csv">actors-short.csv</a></code> and <code><a href="data/actresses-short.csv">actresses-short.csv</a></code>, which contain actor and actress information. Based on these files, create a database called <code>CS143</code> and two tables called <code>Actors</code> and <code>Actresses</code> in MySQL into which you will load the data. Both tables for actors and actresses should include attributes of Name (VARCHAR), Movie (VARCHAR), Year (INTEGER), and Role (VARCHAR).  Remember to specify the number of characters in your VARCHAR declaration. Load the data files into your MySQL tables.</li>
+		<li><b>Step 2:</b> Retrieve some loaded data from the file <code>actors-short.csv</code>.  Write a query that returns the answer to this question: “Give me the names of all the actors in the movie ‘Die Another Day’.” Feel free to experiment with other interesting queries.</li>
+		<li><b>Step 3:</b> Learn to use joins to find information spanned across different tables.  Write a query that returns the answer to this question: “Give me all the actors who acted in multiple movies in the Actors table”.  The basic approach to this is to join the Actors table with itself. The <code>AS</code> statement can be useful to differentiate one Actors table from another in this query. </li>
+		<li><b>Step 4:</b> Create a SQL script named <code>P1A.sql</code> that shows every one of the steps in this part of the project. You can use the <code>‘--‘ tag</code> to make comments within your  script. Make sure you give adequate comments documenting each part of each of the steps. Execute the script and save all outputs in a file. Information on creating scripts and saving its output is provided in the tutorial section <a href="http://dev.mysql.com/doc/refman/5.0/en/batch-mode.html">3.5. Using MySQL in Batch Mode</a>. Make sure the name of you script file is <code>P1A.sql</code>.</li>
+</ul>
+	<h2>Part B</h2> -->
+	<h2>Late Submission Policy</h2>
+		<p>To accommodate the emergencies that 
+		students may encounter, each team has 4-day grace period for late submission. 
+		The grace period can be used for any part of the project in the unit of one 
+		day. For example, a student may use 1-day grace period for Project 1A and 2-day 
+		grace period for Project 2B. Any single project part may not be more than 2 days late. Note that even if a team submits a project 12 hours 
+		late, they would need to use a full day grace period to avoid late penalty. 
+		If your project is submitted late, we will automatically use the available 
+		days in your grace period unless you specifically mention otherwise in the 
+		README file.</p>
+
+
+
+<h2>Submission Instruction</h2>
+        <h3>Preparing Your Submission</h3>
+<p>
+Please create <b>a folder named as your UID</b>, 
+put all your files into the folder, then compress this folder into a single zip file called "P1A.zip". That is, the zip file should have the following structure.
+
+</p><pre class="code">P1A.zip
+ |
+ +- Folder named with Your UID, like "904200000" (without quotes)
+     |
+     +- calculator.php
+     |
+     +- team.txt
+     |
+     +- readme.txt
+</pre>
+
+<p>
+Please note that the <b>file names are case sensitive</b>, so you should use the exact same cases for the file names. (For team work, use the submitter's UID to name the folder)
+</p>
+
+
+
+        <ul type="disc">
+                <li><code>calculator.php</code>: Your <code>calculator.php</code> source code. Again, please make sure that all URLs in your code are <em><b>relative</b></em>. You may get zero point otherwise.                </li>
+		<li><code><b>team.txt</b></code>: A plain-text file (no word or PDF, please) that contains the UID(s) of every member of your team. If you work alone, just write your UID (e.g. 904200000). <br> If you work with a partner, write both UIDs separated by a comma (e.g. 904200000, 904200001). <b>Do not include any other content in this file!</b></li>
+                <li><code>readme.txt</code>: A plain-text file that includes any information you think is useful. 
+ If you have a partner, you may want to discuss briefly how the work was divided (For example, did you divide up the project and work separately? did you use pair programming? etc.). </li>
+	</ul>
+
+<h3>Testing of Your Submission</h3>
+Grading is a difficult and time-consuming process,
+and file naming and packaging convention is very important to test your submission without any error.
+In order to help you ensure the correct packaging of your submission, you can test your packaging by downloading this <a href="http://oak.cs.ucla.edu/classes/cs143/project/p1a_test">test script</a>.
+In essence, this script unzips your submission to a temporary directory and tests whether or not you have included all your submission files.
+The script for Project 1A can be executed like:
+<pre class="code">cs143@cs143:~$ ./p1a_test &lt;Your UID&gt;
+</pre>
+(Put your P1A.zip file in the same directory with this test script, you may need to use "chmod +x p1a_test" if there is a permission error).
+
+<p>You <b>MUST</b> test your submission using the script before your final submission to minimize the chance of an unexpected error during grading.
+Again, significant points may be deducted if the grader encounters an error
+during grading.When evertything runs properly, you will see an output similar to the following from this script:</p><pre class="code">Check File Successfully. Please upload your P1A.zip file to CCLE.
+</pre>
+
+        <h3>Submitting Your Zip File</h3>
+        <p>Visit the Project 1A submission page on CCLE and submit <b>only your "P1A.zip" file</b> electronically by the deadline.
+In order to accomodate the last minite snafu during submission, you will have 30-minute window after the deadline to finish your submission process. That is, as long as you start your submission before the deadline and complete within 30 minutes after the deadline, we won't deduct your grade period without any penalty. </p>
+
+
+
+<h2>FAQ</h2>
+<ol>
+<li><h4>Q: Does the calculator need to handle negative/positive numbers?</h4>
+<p>
+A: We will not use any positive sign before a number, but a negative sign needs to be supported. 
+For example, we may test expressions like "3*-2" or "-2/-3" or "1+-1".
+</p></li>
+
+<li><h4>Q: how should we treat the fractional number: 
+for example: 
+would we treat ".123" as "0.123" or treat it as an invalid expression? </h4>
+<p>
+A: All fractional numbers will have a leading zero in our test, but you 
+are welcome to handle .123 
+</p></li>
+
+<li>
+  <h4>Q: may TAs give us some testing cases to help us to get a 100% score?</h4>
+  <p>
+      </p><ul>
+        <li>-49 (Ans: -49)</li>
+        <li>2+3+4 (Ans: 9)</li>
+        <li>2*3*-4 (Ans: -24)</li>
+        <li>2*-1*-2*-3 (Ans: -12)</li>
+        <li>100-100/100 (Ans: 99)</li>
+        <li>3/2+1/3 (Ans: close or equal to 1.83333333333)</li>
+        <!-- <li>2- -1 (Ans: 3)</li> -->
+        <li>0/0 (NO excpetion shown on the page)</li>
+        <li>abcd (Invalid Expression)</li>
+        <li>one/two (Invalid Expression)</li>
+      </ul>
+  <p></p>
+</li>
+
+</ol>
+
+
+</body></html>

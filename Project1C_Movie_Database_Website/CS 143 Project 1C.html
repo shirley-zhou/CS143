@@ -1,0 +1,351 @@
+
+<!-- saved from url=(0059)http://oak.cs.ucla.edu/classes/cs143/project/project1C.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<!--<base href="http://oak.cs.ucla.edu/classes/cs143/project/">--><base href=".">
+<title>CS 143 Project 1C</title>
+  <style type="text/css">
+    .code {
+        background-color:#eeeeee;
+        border: solid 1px #000000;
+        font-family:"Courier New", Courier, mono;
+        font-size: .8em;
+        margin: 5px;
+        padding: 5px;
+    }
+  </style>
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body bgcolor="#FFFFFF" link="blue" vlink="purple" lang="EN-US">
+	<h1 align="center">Project 1 Part C</h1>
+	<p align="center"><strong>Due Tuesday 11/01/2016 by 11:00pm</strong></p>
+
+    <h2>Late Submission Policy</h2>
+    <p>To accommodate the emergencies that
+        students may encounter, each team has 4-day grace period for late submission.
+        The grace period can be used for any part of the project in the unit of one
+        day. For example, a student may use 1-day grace period for Project 1A and 2-day
+        grace period for Project 2B. Any single project part may not be more than 2 days late. Note that even if a team submits a project 12 hours
+        late, they would need to use a full day grace period to avoid late penalty.
+        If your project is submitted late, we will automatically use the available
+        days in your grace period unless you specifically mention otherwise in the
+        README file.</p>
+    <hr>
+	<p>The final part of the Movie Database project is
+		very open-ended and some students may want to get started early.</p>
+	<p>In the last part you are to (finally) create a fully
+		functioning Movie Database system accessed by users exclusively through a Web
+		interface. The functionality of your
+		Movie Database system is quite flexible, although we expect all students to
+		implement some baseline capabilities: </p>
+	<h4>Four input pages:</h4>
+	<ul type="disc">
+		<li>Page I1: A page that
+			lets users to add actor and/or director information.<br.>
+		    e.g. Here are some "reasonable" names: Chu-Cheng Hsieh, J'son Lee, etc.</br.></li>
+		<li>Page I2: A page that
+			lets users to add movie information.</li>
+		<li>Page I3: A page that
+			lets users to add comments to movies.</li>
+		<li>Page I4: A page that
+			lets users to add "actor to movie" relation(s).</li>
+		<li>Page I5: A page that
+			lets users to add "director to movie" relation(s). 
+</li>
+	</ul>
+	<h4>Two browsing pages:</h4>
+	<ul type="disc">
+		<li>Page B1: A page that shows
+			actor information.</li>
+		<ul type="circle">
+			<li>Show links to the
+				movies that the actor was in.</li>
+		</ul>
+		<li>Page B2: A page that
+			shows movie information.</li>
+		<ul type="circle">
+			<li>Show links to the
+				actors/actresses that were in this movie.</li>
+			<li>Show the average score
+				of the movie based on user feedbacks.</li>
+			<li>Show all user
+				comments.</li>
+			<li>Contain "Add
+				Comment" button which links to Page I3 where users can add comments.</li>
+		</ul>
+	</ul>
+	<h4>One search page:</h4>
+	<ul type="disc">
+		<li>Page S1: A page that
+			lets users search for an actor/actress/movie through a keyword search
+			interface. (For actor/actress, you should examine first/last name, and
+      for movie, you should examine title.)  <p>
+      Your search page <strong>should</strong> support <strong>multi-word</strong> search, such as "Tom Hanks". 
+      For multi-word search, interpret space as "<a href="http://en.wikipedia.org/wiki/Logical_and">AND</a>" relation. That is, return all items that contain both words, "Tom" and "Hanks".
+       Since the search page is for actor/actress/movie, so if there was a movie named "I love Tom Hanks!", it should be returned.
+       As for the output, you should sort them in a way that users could find an item easily.
+		</p></li>
+	</ul>
+
+		A demo site is available <a href="http://oak.cs.ucla.edu/classes/cs143/project/demo/p1c/" target="_blank">here</a>. This page is available strictly to give you an idea of the basic requirements, and is <em>not</em> meant to guide your choice of style or user interface in any way. Please be creative, and do not simply mimic the UI of the demo site.
+
+	<p></p><h4>Important Notes: </h4>
+	<ul type="disc">
+    <li>"Pages" mentioned above are units of conceptual functions that you need to provide, not distinct "files". 
+    It is OK to implement multiple "pages" as a single php page. For example, 
+    it is OK to combine S1 and B2 by adding a search box to a page that shows movie information. 
+    You can also use multiple php pages to implement a single "page" in our spec.
+    </li> 
+    <li>While the functionality of your Movie Database system is quite open-ended, the interface itself is <i>extremely</i> open-ended. This class is not a user interface class and <em>you can certainly get most of the credit for a solid system</em> with simple input boxes, menus, and/or radio buttons, and simple HTML output tables as long as your web site is reasonably intuitive to use.
+That is, the user should be able to navigate through your web site without too much difficulty. Having said this, we welcome much snazzier interfaces, like something resembling IMDb.com itself, or perhaps even something better!</li>
+    <li>It is okay to embed some javascript or CSS to make your website look good, but please make sure your work is <strong>completely self-contained</strong>. 
+    Namely, all javascript/CSS files related to your website should be incorporated in your submission.</li>
+
+    <li>You may assume that the users are not malicious. They do not intentionally perform anything bad, such as an SQL injection. However, any PHP/database errors due to simple data entry errors or bad input values should be managed gracefully, i.e., it should be possible for users to continue interacting with the system, and the database should not get corruptted. </li>
+		<li>You need to use the same set of tables (and only them) that you created in Part B of this project. You should use the database CS143 by connecting with username "cs143" and empty password.</li>
+    <li>Please ensure that your work does not use more than 20MB space.</li>
+	</ul>
+	<p>Although the project interface is very open-ended, we have to make the basic features of your system accessible in a typical browser environment. More precisely, you must make sure your system work with the most recent vesion of the Mozilla Firefox browser without any additional plugins or extensions. If you feel this restriction will somehow limit yourself too much, you must get "preapproval" from the TA to use a different browser environment. Send an email message to your TA telling him precisely what browser environment you wish to use for your project and why it is necessary.
+When the preapproval process is not followed, projects that have problems on Mozilla Firefox may lose points, possibly all points if we cannot run your project at all.</p>
+	<p>We may select a small number of Movie Database systems to be demonstrated to the class at time to be determined. Students will not receive extra credit, but they will receive extra recognition. The criteria for selection will be some combination of beyond-the-basics functionality and a good user interface.</p>
+<h4>Hints on implementation</h4>
+
+<ul>
+ 		<li>Please note that when your PHP scripts inserts a new tuple, your program will likely need to lookup either MaxPersonID or MaxMovieID table, assign a unique ID to the new actor/movie, and increase the MaxPersonID or MaxMovieID table value.</li>
+	<li>In adding user reviews to a movie, you may need to obtain the current timestamp. You can do it either in your PHP code or in MySQL itself. The <a href="http://dev.mysql.com/doc/refman/5.0/en/date-and-time-functions.html">MySQL date and time functions</a> page explains how you can obtain the current timestamp in MySQL.</li>
+<li>Note that your php pages can be accessed directly through a URL like 
+<a href="http://guestip/~cs143/mypage.php?param1=value1&amp;param2=value2&amp;param3=value3">http://guestip/~cs143/mypage.php?param1=value1&amp;param2=value2&amp;param3=value3</a>
+where mypage.php is the name of your php page, and the string after the question mark contains parameters passed to the php page just like in a "GET" method. So you can <em>embed a clickable link to the page</em> generated by your php code using hyperlinks of the above format, with appropriate parameters that instruct your PHP code to execute the right query. 
+</li> </ul>
+
+
+    <h4>Your Project 1B</h4>
+<ul>
+<li>Note that your project 1C is dependent on your project 1B. To make sure you can get 100% score, please make sure your project 1B is working correctly and fix any existing bugs.  As part of project 1C submission, you will have to submit the relevant files of your (revised) project 1B again. </li>
+
+        </ul>
+    <p></p>
+
+
+    <h2>Demonstrate your website </h2>
+    <p>By now you should already have a working website, and in this section you are going to prove that your site is
+    working correctly. To prove it, you are asked to use <a target="_blank" href="http://seleniumhq.org/">Selenium</a> project,
+    specificly <a target="_blank" href="http://docs.seleniumhq.org/projects/ide/">Selenuim IDE</a>.</p>
+
+        <h3>What is Selenium IDE?</h3>
+        <p>Selenium IDE is designed for automating browser tests. It is essentially a Firefox broswer plug-in. 
+         Primarily it is for automating web applications for testing purposes. However, here we use Selenium as 
+        an "screen action recorder". That is to say, Selenum allows you to
+        record a sequence of steps and a TA could <strong>replay</strong> it. </p>
+
+        <h3>Install Selenum IDE</h3>
+        <ol>
+            <li>
+                Install <a target="_blank" href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a>
+                (if you don't have it). Note that you should install Firefox to your operating system (windows/mac),
+                but <strong>NOT</strong> to the virtual machine (ubuntu). Your ubuntu image (installed in the virtual machine) is
+                just a web server and you need a client (which is your current operating system) to try your website.
+                (Please download the latest released version.)
+            </li>
+            <li>Download Selenium IDE: <a href="http://seleniumhq.org/download/" target="_blank">Link</a>
+                (Please download the latest released version.) In your Firefox browser, when you click the download link which is showed as
+                a version number, your Firefox will pop up a window to let you install the plug-in.
+            </li>
+            <li>If you don't know how to install an xpi...</li>
+            <iframe width="650" height="420" src="./CS 143 Project 1C_files/mFGC5ECoSyI.html" frameborder="0" allowfullscreen=""></iframe>
+
+        </ol>
+        <h3>Using Selenium (A Video Tutorial by Chu-Cheng)</h3>
+
+    <iframe width="650" height="420" src="./CS 143 Project 1C_files/Q3eWlYOH_bo.html" frameborder="0" allowfullscreen=""></iframe>
+
+
+    <!--
+    <ol>
+        <li>Record your action as a test case</li>
+        <iframe width="420" height="315" src="http://www.youtube.com/embed/qz7BCkHEIlw" frameborder="0" allowfullscreen></iframe>
+
+        <li>
+        Replay and save your test case</li>
+        <iframe width="420" height="315" src="http://www.youtube.com/embed/ZEDz8I5PQoE" frameborder="0" allowfullscreen></iframe>
+    </ol>
+    -->
+
+<p>Using selenium, create the following five test case files:
+        </p><ol>
+            <li><code>t1.html</code>: use your search page to search for <strong>Tom Hanks</strong>, and it should return just ONE match (actor).
+                Then you should click the actor "Tom Hanks" in your search result (it should be <em>a link pointing to a page that displays information about Tom Hanks</em>).</li>
+            <li><code>t2.html</code>: use your web pages to create:</li>
+            <ul>
+                <li>Actor: <strong>Happy Jack, Male, born on 1994-10-10, alive now</strong> (note: first name: <strong>Happy</strong> &amp;
+                    last name: <strong>Jack</strong>).</li>
+                <li>Director: <strong>Mary Queen, Female, born on 1977-02-27, died on 2012-12-31</strong> (note: first name: <strong>Mary</strong> &amp;
+                    last name: <strong>Queen</strong>).</li>
+            </ul>
+            <li><code>t3.html</code>: create a fake movie, title:<strong>CS143</strong>; company:<strong>UCLA</strong>
+            ; year:<strong>2013</strong>; director:<strong>Mary Queen</strong>; genre: <strong>Action</strong> and <strong>Horror</strong>; MPAA: <strong>G</strong>; "Happy Jack" acted as role <strong>TA</strong> in this movie.
+            </li>
+            <li><code>t4.html</code>: use your review page to create two reviews: (1) content: <strong>very good</strong> and score: <strong>5</strong> (2)
+                content: <strong>excellent</strong> and
+                score: <strong>4</strong>. And then use your search page to search <strong>CS143</strong>, and your test case should stop
+            at the page where we can see the average is 4.5, two comments your wrote, and other movie info.</li>
+            <li><code>t5.html</code>: user your search page to search keyword <strong>santa</strong> (note: all letters in lowercase
+                in this test case),
+                and you test case should stop
+            at the search result page, which should contain 7 actors (
+                Actor: Toni Santagata(1940-12-09),
+                Actor: Yusuke Santamaria(1971-03-12),
+                Actor: Carlos Santana(1947-07-20),
+                Actor: Henrique Santana(1924-05-07),
+                Actor: Merlin Santana(1976-03-14),
+                Actor: Peter Santana(1966-03-29),
+                Actor: Carolina Santangelo(1986-08-05))
+            and 3 movies (
+                Movie: Santa Claws(1996),
+                Movie: Santa Fe(1997),
+                Movie: Santa with Muscles(1996) ).</li>
+        </ol>
+
+<h2>Submission Instruction</h2>
+	<h3>Preparing Your Submission</h3>
+<p>
+Please create <b>a folder named as your UID</b>, and create "<tt>sql</tt>", "<tt>www</tt>", and "<tt>testcase</tt>" folders within your UID folder. 
+Put 
+your <tt>create.sql</tt> and <tt>load.sql</tt> files from project 1B into the <tt>sql</tt> folder, 
+all your web site source files into the <tt>www</tt> folder, 
+your selenium test case files into the <tt>testcase</tt> folder, 
+and your README file into the UID folder. Compress your UID folder into a single zip file called "P1C.zip". In summary, your zip file should have the following structure.
+</p><pre class="code">P1C.zip
+ |
+ +- Folder named with Your UID, like "904200000" (without quotes)
+     |
+     +- readme.txt
+     |
+     +- team.txt
+     |   
+     +- sql
+	 |
+	 +- create.sql
+	 |
+	 +- load.sql
+     |
+     +- www (all your website files are put under this folder, files listed are just examples, you can choose other names)
+	 |
+	 +- index.php
+	 |
+	 +- search.php
+         |
+         +- others.php
+         :
+     |
+     +- testcase
+         |
+         +- t1.html
+	 |
+         +- t2.html
+         |
+         +- t3.html
+         |
+         +- t4.html
+         |
+         +- t5.html
+</pre>
+
+
+<p>
+Please note that the <b>file names are case sensitive</b>, so you should use the exact same cases for the file names. (For team work, use the submitter's UID to name the folder)
+</p>
+
+
+
+	<ul type="disc">
+		<li><code>readme.txt</code>: A README file, with a detailed
+			explanation of which of the project criteria
+			you met, as well as any additional features you have implemented.</li>
+		<ul>
+			<li>If you worked as a team with a partner, briefly explain how you split the work and collaborated in your README file. Also briefly explain what aspect you feel you can improve in a team setting for better collaboration.</li>
+		</ul>
+		<li><code><b>team.txt</b></code>: A plain-text file (no word or PDF, please) that contains the UID(s) of every member of your team. If you work alone, just write your UID (e.g. 904200000). <br> If you work with a partner, write both UIDs separated by a comma (e.g. 904200000, 904200001). <b>Do not include any other content in this file!</b></li>
+		<li><code>sql/</code>: a folder which contains your (revised) <tt>create.sql</tt> and <tt>load.sql</tt> files from project 1B.</li>
+   <ul>
+ <li>Please make sure that when you run <strong>mysql CS143 &lt; ./create.sql</strong> and <strong>mysql CS143 &lt; ./load.sql</strong> in this directory, there is no error. </li>
+  </ul>
+		<li><code>www/</code>: a folder which contains all the source code and other supplementary files of your web site
+		<ul type="circle">
+			<li>After loading the database, the TA should be able to simply copy the files in this directory to ${HOME}/www and run your web site without any issues.</li>
+			<li>Your web site should use the database CS143 by connecting with username "cs143" and empty password.</li>
+			<li>Remember to use relative URLs in your machine/port references. You may be get zero point for code with faulty URL links that don't work during grading.</li>
+		</ul>
+        </li><li><code>testcase/</code>: a folder which contains your five selenium test case files, named as <tt>t1.html</tt> through <tt>t5.html</tt>.</li>
+	<ul>
+	<li>Make sure that your web server (virtual machine) is accessed through <strong>localhost:1438</strong> in your test case files. If you assigned a different address and/or port to your virtual machine for any reason, make sure you use an editor to replace your address to localhost:1438 in the <tt>t?.html</tt> files.</li>
+	<li>To ensure your recorded test cases work, <b>always replay your recorded test cases before you submit them</b>. If your test cases cannot run correctly, you will get as low as zero. If two persons work as a team, it may be a good idea to have one person record the test cases and have the other replay them.</li>
+	</ul>
+  </ul>
+
+<h3>Testing of Your Submission</h3>
+Grading is a difficult and time-consuming process,
+and file naming and packaging convention is very important to test your submission without any error.
+In order to help you ensure the correct packaging of your submission, you can test your packaging by downloading this <a href="http://oak.cs.ucla.edu/classes/cs143/project/p1c_test">test script</a>.
+In essence, this script unzips your submission to a temporary directory and tests whether or not you have included all your submission files.
+The script for Project 1C can be executed like:
+<pre class="code">cs143@cs143:~$ ./p1c_test &lt;Your UID&gt;
+</pre>
+(Put your P1C.zip file in the same directory with this test script, you may need to use "chmod +x p1c_test" if there is a permission error).
+
+<p>You <b>MUST</b> test your submission using the script before your final submission to minimize the chance of an unexpected error during grading.
+Again, significant points may be deducted if the grader encounters an error
+during grading.When evertything runs properly, you will see an output similar to the following from this script:</p><pre class="code">Check File Successfully. Please upload your P1C.zip file to CCLE.
+</pre>
+
+	<h3>Submitting Your Zip File</h3>
+	<p>Visit the Project 1C submission page on CCLE and submit <b>only your "PIC.zip" file</b> electronically by the deadline. 
+In order to accomodate the last minite snafu during submission, you will have 30-minute window after the deadline to finish your submission process. That is, as long as you start your submission before the deadline and complete within 30 minutes after the deadline, we won't deduct your grade period without any penalty. </p>
+
+    <h2>Grading: </h2>
+        <ul type="disc">
+            <li>(10%) We can navigate your website using Firefox without any errors, and your
+                websites contain all assigned pages.</li>
+            <li>(20%) All your Selenium test cases point to a web server with address: <strong>localhost:1438</strong>, and
+            your test cases complete without encountering any error/warning.</li>
+            <li>(50%) Each test case is 10% if it acts as expected (correct result). Please follow "What to submit"
+            precisely, especially all the values (case sensitive) you are asked to enter. </li>
+            <li>(20%) 2 additional test cases designed by our grader/TA.</li>
+            <br>
+
+            Notes: <br>
+            (1) Do not record your screen with any other software. We only accept Selenium test cases.<br>
+            (2) If your Selenium test cases have problems because you did not follow the spec, you may lose
+            significant points. <br>
+            (3) Start your project early and use our discussion forum, asking for clarifications if
+            any part of this spec looks unclear to you.
+        </ul>
+
+	<!--
+	<h2>Grading Session	</h2>
+	<p> Your project 1C submissions will be graded through "grading sessions," 
+		in which each student group should demonstrate their implementation 
+		of the project to the TAs in person. 
+		Every student group will be allocated 7-minute time slot for demonstration. A <a href="p1csignup/index.php">sign-up sheet</a> for the grading sessions is available  online.</p>
+	<p> Here are important things that you will have to remember before coming
+		to your grading session: </p>
+	<ol>
+		<li>During your grading session, the TA will simply unzip your submitted file into a directory and ask you to demonstrate the required functionality. (The CS143 database would have been populated with the tables specified in Project 1B using our dataset.) Make sure your submission is runnable simply after unzipping it. <b><em>Your site cannot assume that any additional auxiliary table or tuples in the CS143 database.</em></b>  In previous years, some students wasted their entire 7 minutes just trying to "setup" their Web site, leaving no time to actually test their sites. It is your responsibility to demonstrate all requirements within your allocated 7 minutes.  If you fail to demonstrate some parts of the requirements, you will get points deducted for those parts.  To avoid this unfortunate possibility, you may want to think about how you can demonstrate each requirement in the minimal amount of time before you come.</li>
+		<li> The TA will check your Web sites using the code you submitted electronically and an existing VM image, so
+			you do not need to bring any laptop. </li>
+	</ol>
+	-->
+
+
+</body></html>
